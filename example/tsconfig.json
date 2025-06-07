@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "expo-text-input-context-menu-custom-items": ["../src/index"],
+      "expo-text-input-context-menu-custom-items/*": ["../src/*"]
+    }
+  }
+}

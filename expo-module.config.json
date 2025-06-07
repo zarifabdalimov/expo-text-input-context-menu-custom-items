@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["ExpoTextInputContextMenuCustomItemsModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.textinputcontextmenucustomitems.ExpoTextInputContextMenuCustomItemsModule"]
+  }
+}
