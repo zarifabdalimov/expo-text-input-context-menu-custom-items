@@ -6,6 +6,6 @@ import { ExpoTextInputContextMenuCustomItemsViewProps } from './ExpoTextInputCon
 const NativeView: React.ComponentType<ExpoTextInputContextMenuCustomItemsViewProps> =
   requireNativeView('ExpoTextInputContextMenuCustomItems');
 
-export default function ExpoTextInputContextMenuCustomItemsView(props: ExpoTextInputContextMenuCustomItemsViewProps) {
+export default function ContextMenu(props: ExpoTextInputContextMenuCustomItemsViewProps) {
   return <NativeView {...props} />;
 }

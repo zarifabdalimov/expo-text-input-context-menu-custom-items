@@ -1,19 +1,30 @@
-import type { StyleProp, ViewStyle } from 'react-native';
+export interface ContextMenuItem {
+  id: string;
+  title: string;
+  subtitle?: string;
+  systemImage?: string; // iOS system image name
+  icon?: string; // Android drawable resource name or URI
+}
 
-export type OnLoadEventPayload = {
-  url: string;
-};
+export interface ContextMenuConfig {
+  items: ContextMenuItem[];
+  replaceSystemItems?: boolean; // If true, only show custom items and hide system items (Copy, Paste, etc.)
+}
+
+export interface ContextMenuActionPayload {
+  itemId: string;
+  selectedText: string;
+  selectionStart: number;
+  selectionEnd: number;
+}
 
 export type ExpoTextInputContextMenuCustomItemsModuleEvents = {
-  onChange: (params: ChangeEventPayload) => void;
-};
-
-export type ChangeEventPayload = {
-  value: string;
+  onContextMenuAction: (params: ContextMenuActionPayload) => void;
 };
 
 export type ExpoTextInputContextMenuCustomItemsViewProps = {
-  url: string;
-  onLoad: (event: { nativeEvent: OnLoadEventPayload }) => void;
-  style?: StyleProp<ViewStyle>;
+  contextMenuConfig?: ContextMenuConfig;
+  onContextMenuAction?: (event: { nativeEvent: ContextMenuActionPayload }) => void;
+  children?: React.ReactNode;
+  style?: any;
 };
