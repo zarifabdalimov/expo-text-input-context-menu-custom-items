@@ -1,6 +1,6 @@
 {
   "name": "expo-text-input-context-menu-custom-items",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Allows to use custom text input context menu items when highlighting the text",
   "main": "build/index.js",
   "types": "build/index.d.ts",
