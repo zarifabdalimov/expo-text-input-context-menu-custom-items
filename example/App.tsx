@@ -1,9 +1,16 @@
-import { ContextMenu } from 'expo-text-input-context-menu-custom-items'
-import React from 'react'
-import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ContextMenu } from "expo-text-input-context-menu-custom-items";
+import React from "react";
+import {
+  Alert,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 export default function App() {
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -14,7 +21,9 @@ export default function App() {
         </Text>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Global Context Menu (all text inputs)</Text>
+          <Text style={styles.sectionTitle}>
+            Global Context Menu (all text inputs)
+          </Text>
           <TextInput
             style={styles.textInput}
             multiline
@@ -24,28 +33,30 @@ export default function App() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>With Custom Context Menu Wrapper</Text>
+          <Text style={styles.sectionTitle}>
+            With Custom Context Menu Wrapper
+          </Text>
           <ContextMenu
             style={styles.contextMenuWrapper}
             contextMenuConfig={{
               items: [
                 {
-                  id: 'custom-action',
-                  title: 'Custom Action',
-                  subtitle: 'This is a custom action',
-                  systemImage: 'star.fill', // iOS only
+                  id: "custom-action",
+                  title: "Custom Action",
+                  subtitle: "This is a custom action",
+                  systemImage: "star.fill", // iOS only
                 },
                 {
-                  id: 'another-action',
-                  title: 'Another Action',
-                  subtitle: 'Another custom action',
-                  systemImage: 'heart.fill', // iOS only
-                }
-              ]
+                  id: "another-action",
+                  title: "Another Action",
+                  subtitle: "Another custom action",
+                  systemImage: "heart.fill", // iOS only
+                },
+              ],
             }}
             onContextMenuAction={(event) => {
               const { itemId, selectedText } = event.nativeEvent;
-              Alert.alert('Custom Action', `${itemId}: "${selectedText}"`);
+              Alert.alert("Custom Action", `${itemId}: "${selectedText}"`);
             }}
           >
             <TextInput
@@ -58,50 +69,52 @@ export default function App() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Only Custom Items (Hide System Items)</Text>
+          <Text style={styles.sectionTitle}>
+            Only Custom Items (Hide System Items)
+          </Text>
           <ContextMenu
             style={styles.contextMenuWrapper}
             contextMenuConfig={{
               items: [
                 {
-                  id: 'encrypt',
-                  title: 'Encrypt Text',
-                  subtitle: 'Encrypt selected text',
-                  systemImage: 'lock.fill', // iOS only
+                  id: "encrypt",
+                  title: "Encrypt Text",
+                  subtitle: "Encrypt selected text",
+                  systemImage: "lock.fill", // iOS only
                 },
                 {
-                  id: 'count-words',
-                  title: 'Count Words',
-                  subtitle: 'Count words in selection',
-                  systemImage: 'textformat.123', // iOS only
+                  id: "count-words",
+                  title: "Count Words",
+                  subtitle: "Count words in selection",
+                  systemImage: "textformat.123", // iOS only
                 },
                 {
-                  id: 'reverse',
-                  title: 'Reverse Text',
-                  subtitle: 'Reverse selected text',
-                  systemImage: 'arrow.uturn.backward', // iOS only
-                }
+                  id: "reverse",
+                  title: "Reverse Text",
+                  subtitle: "Reverse selected text",
+                  systemImage: "arrow.uturn.backward", // iOS only
+                },
               ],
-              replaceSystemItems: true // This hides Copy, Paste, Cut, etc.
+              replaceSystemItems: true, // This hides Copy, Paste, Cut, etc.
             }}
             onContextMenuAction={(event) => {
               const { itemId, selectedText } = event.nativeEvent;
-              let message = '';
+              let message = "";
               switch (itemId) {
-                case 'encrypt':
+                case "encrypt":
                   message = `Encrypted: ${btoa(selectedText)}`;
                   break;
-                case 'count-words':
+                case "count-words":
                   const wordCount = selectedText.trim().split(/\s+/).length;
                   message = `Word count: ${wordCount}`;
                   break;
-                case 'reverse':
-                  message = `Reversed: ${selectedText.split('').reverse().join('')}`;
+                case "reverse":
+                  message = `Reversed: ${selectedText.split("").reverse().join("")}`;
                   break;
                 default:
                   message = `${itemId}: "${selectedText}"`;
               }
-              Alert.alert('Custom Only Action', message);
+              Alert.alert("Custom Only Action", message);
             }}
           >
             <TextInput
@@ -129,7 +142,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   scrollView: {
     flex: 1,
@@ -137,16 +150,16 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 20,
-    color: '#333',
+    color: "#333",
   },
   instructions: {
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 30,
-    color: '#666',
+    color: "#666",
     lineHeight: 22,
   },
   section: {
@@ -154,27 +167,27 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 10,
-    color: '#333',
+    color: "#333",
   },
   textInput: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     padding: 15,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     fontSize: 16,
     lineHeight: 22,
     minHeight: 100,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
   },
   singleLineInput: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     padding: 15,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     fontSize: 16,
     height: 50,
   },
@@ -184,21 +197,20 @@ const styles = StyleSheet.create({
   statusSection: {
     marginTop: 20,
     padding: 15,
-    backgroundColor: '#e8f4f8',
+    backgroundColor: "#e8f4f8",
     borderRadius: 8,
     borderLeftWidth: 4,
-    borderLeftColor: '#007AFF',
+    borderLeftColor: "#007AFF",
   },
   statusTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600",
+    color: "#333",
     marginBottom: 5,
   },
   statusText: {
     fontSize: 14,
-    color: '#666',
-    fontFamily: 'monospace',
+    color: "#666",
+    fontFamily: "monospace",
   },
 });
-

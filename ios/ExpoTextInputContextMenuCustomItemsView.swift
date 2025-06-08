@@ -217,17 +217,59 @@ class ExpoTextInputContextMenuCustomItemsView: ExpoView {
     }
     
     private func setupCustomTextView(_ textView: UITextView) {
-        // Replace with our custom text view
+        // Don't replace if it's already our custom view
+        if textView is CustomTextView { return }
+        
+        // Create custom text view with same frame
         let customTextView = CustomTextView(frame: textView.frame)
+        
+        // Copy all text properties
         customTextView.text = textView.text
+        customTextView.attributedText = textView.attributedText
         customTextView.font = textView.font
         customTextView.textColor = textView.textColor
-        customTextView.backgroundColor = textView.backgroundColor
+        customTextView.textAlignment = textView.textAlignment
+        customTextView.selectedRange = textView.selectedRange
+        
+        // Copy editing properties
         customTextView.isEditable = textView.isEditable
         customTextView.isSelectable = textView.isSelectable
-        customTextView.customMenuItems = contextMenuItems
+        customTextView.isScrollEnabled = textView.isScrollEnabled
+        customTextView.isUserInteractionEnabled = textView.isUserInteractionEnabled
         
-        // Check if we should replace system items
+        // Copy appearance properties
+        customTextView.backgroundColor = textView.backgroundColor
+        customTextView.layer.cornerRadius = textView.layer.cornerRadius
+        customTextView.layer.borderWidth = textView.layer.borderWidth
+        customTextView.layer.borderColor = textView.layer.borderColor
+        customTextView.alpha = textView.alpha
+        customTextView.isHidden = textView.isHidden
+        
+        // Copy scroll view properties
+        customTextView.showsVerticalScrollIndicator = textView.showsVerticalScrollIndicator
+        customTextView.showsHorizontalScrollIndicator = textView.showsHorizontalScrollIndicator
+        customTextView.bounces = textView.bounces
+        customTextView.alwaysBounceVertical = textView.alwaysBounceVertical
+        customTextView.alwaysBounceHorizontal = textView.alwaysBounceHorizontal
+        
+        // Copy content insets and container properties
+        customTextView.contentInset = textView.contentInset
+        customTextView.scrollIndicatorInsets = textView.scrollIndicatorInsets
+        customTextView.textContainerInset = textView.textContainerInset
+        customTextView.textContainer.lineFragmentPadding = textView.textContainer.lineFragmentPadding
+        customTextView.textContainer.maximumNumberOfLines = textView.textContainer.maximumNumberOfLines
+        customTextView.textContainer.lineBreakMode = textView.textContainer.lineBreakMode
+        
+        // Copy keyboard properties
+        customTextView.keyboardType = textView.keyboardType
+        customTextView.keyboardAppearance = textView.keyboardAppearance
+        customTextView.returnKeyType = textView.returnKeyType
+        customTextView.autocorrectionType = textView.autocorrectionType
+        customTextView.autocapitalizationType = textView.autocapitalizationType
+        customTextView.spellCheckingType = textView.spellCheckingType
+        
+        // Set custom properties
+        customTextView.customMenuItems = contextMenuItems
         if let config = getCurrentConfig() {
             customTextView.replaceSystemItems = config["replaceSystemItems"] as? Bool ?? false
         }
@@ -241,22 +283,104 @@ class ExpoTextInputContextMenuCustomItemsView: ExpoView {
             ])
         }
         
-        textView.superview?.insertSubview(customTextView, aboveSubview: textView)
+        guard let superview = textView.superview else { return }
+        
+        // Transfer Auto Layout constraints
+        customTextView.translatesAutoresizingMaskIntoConstraints = textView.translatesAutoresizingMaskIntoConstraints
+        
+        if !textView.translatesAutoresizingMaskIntoConstraints {
+            // Copy all constraints from the original view
+            let constraints = superview.constraints.filter { constraint in
+                constraint.firstItem as? UIView == textView || constraint.secondItem as? UIView == textView
+            }
+            
+            // Add the custom view first
+            superview.insertSubview(customTextView, aboveSubview: textView)
+            
+            // Update constraints to reference the new view
+            for constraint in constraints {
+                let newConstraint: NSLayoutConstraint
+                
+                if constraint.firstItem as? UIView == textView {
+                    newConstraint = NSLayoutConstraint(
+                        item: customTextView,
+                        attribute: constraint.firstAttribute,
+                        relatedBy: constraint.relation,
+                        toItem: constraint.secondItem,
+                        attribute: constraint.secondAttribute,
+                        multiplier: constraint.multiplier,
+                        constant: constraint.constant
+                    )
+                } else {
+                    newConstraint = NSLayoutConstraint(
+                        item: constraint.firstItem as Any,
+                        attribute: constraint.firstAttribute,
+                        relatedBy: constraint.relation,
+                        toItem: customTextView,
+                        attribute: constraint.secondAttribute,
+                        multiplier: constraint.multiplier,
+                        constant: constraint.constant
+                    )
+                }
+                
+                newConstraint.priority = constraint.priority
+                newConstraint.isActive = constraint.isActive
+                superview.removeConstraint(constraint)
+                superview.addConstraint(newConstraint)
+            }
+        } else {
+            // For frame-based layout, ensure autoresizing mask is copied
+            customTextView.autoresizingMask = textView.autoresizingMask
+            superview.insertSubview(customTextView, aboveSubview: textView)
+        }
+        
+        // Remove the original view
         textView.removeFromSuperview()
     }
     
     private func setupCustomTextField(_ textField: UITextField) {
-        // Replace with our custom text field
+        // Don't replace if it's already our custom view
+        if textField is CustomTextField { return }
+        
+        // Create custom text field with same frame
         let customTextField = CustomTextField(frame: textField.frame)
+        
+        // Copy all text properties
         customTextField.text = textField.text
+        customTextField.attributedText = textField.attributedText
+        customTextField.placeholder = textField.placeholder
+        customTextField.attributedPlaceholder = textField.attributedPlaceholder
         customTextField.font = textField.font
         customTextField.textColor = textField.textColor
-        customTextField.backgroundColor = textField.backgroundColor
-        customTextField.placeholder = textField.placeholder
-        customTextField.isEnabled = textField.isEnabled
-        customTextField.customMenuItems = contextMenuItems
+        customTextField.textAlignment = textField.textAlignment
         
-        // Check if we should replace system items
+        // Copy editing properties
+        customTextField.isEnabled = textField.isEnabled
+        customTextField.isUserInteractionEnabled = textField.isUserInteractionEnabled
+        customTextField.borderStyle = textField.borderStyle
+        customTextField.clearButtonMode = textField.clearButtonMode
+        customTextField.minimumFontSize = textField.minimumFontSize
+        customTextField.adjustsFontSizeToFitWidth = textField.adjustsFontSizeToFitWidth
+        
+        // Copy appearance properties
+        customTextField.backgroundColor = textField.backgroundColor
+        customTextField.layer.cornerRadius = textField.layer.cornerRadius
+        customTextField.layer.borderWidth = textField.layer.borderWidth
+        customTextField.layer.borderColor = textField.layer.borderColor
+        customTextField.alpha = textField.alpha
+        customTextField.isHidden = textField.isHidden
+        
+        // Copy keyboard properties
+        customTextField.keyboardType = textField.keyboardType
+        customTextField.keyboardAppearance = textField.keyboardAppearance
+        customTextField.returnKeyType = textField.returnKeyType
+        customTextField.autocorrectionType = textField.autocorrectionType
+        customTextField.autocapitalizationType = textField.autocapitalizationType
+        customTextField.spellCheckingType = textField.spellCheckingType
+        customTextField.isSecureTextEntry = textField.isSecureTextEntry
+        
+        // Set custom properties
+        customTextField.customMenuItems = contextMenuItems
         if let config = getCurrentConfig() {
             customTextField.replaceSystemItems = config["replaceSystemItems"] as? Bool ?? false
         }
@@ -270,7 +394,58 @@ class ExpoTextInputContextMenuCustomItemsView: ExpoView {
             ])
         }
         
-        textField.superview?.insertSubview(customTextField, aboveSubview: textField)
+        guard let superview = textField.superview else { return }
+        
+        // Transfer Auto Layout constraints
+        customTextField.translatesAutoresizingMaskIntoConstraints = textField.translatesAutoresizingMaskIntoConstraints
+        
+        if !textField.translatesAutoresizingMaskIntoConstraints {
+            // Copy all constraints from the original view
+            let constraints = superview.constraints.filter { constraint in
+                constraint.firstItem as? UIView == textField || constraint.secondItem as? UIView == textField
+            }
+            
+            // Add the custom view first
+            superview.insertSubview(customTextField, aboveSubview: textField)
+            
+            // Update constraints to reference the new view
+            for constraint in constraints {
+                let newConstraint: NSLayoutConstraint
+                
+                if constraint.firstItem as? UIView == textField {
+                    newConstraint = NSLayoutConstraint(
+                        item: customTextField,
+                        attribute: constraint.firstAttribute,
+                        relatedBy: constraint.relation,
+                        toItem: constraint.secondItem,
+                        attribute: constraint.secondAttribute,
+                        multiplier: constraint.multiplier,
+                        constant: constraint.constant
+                    )
+                } else {
+                    newConstraint = NSLayoutConstraint(
+                        item: constraint.firstItem as Any,
+                        attribute: constraint.firstAttribute,
+                        relatedBy: constraint.relation,
+                        toItem: customTextField,
+                        attribute: constraint.secondAttribute,
+                        multiplier: constraint.multiplier,
+                        constant: constraint.constant
+                    )
+                }
+                
+                newConstraint.priority = constraint.priority
+                newConstraint.isActive = constraint.isActive
+                superview.removeConstraint(constraint)
+                superview.addConstraint(newConstraint)
+            }
+        } else {
+            // For frame-based layout, ensure autoresizing mask is copied
+            customTextField.autoresizingMask = textField.autoresizingMask
+            superview.insertSubview(customTextField, aboveSubview: textField)
+        }
+        
+        // Remove the original view
         textField.removeFromSuperview()
     }
     
